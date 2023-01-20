@@ -1,4 +1,5 @@
 import socket
+from threading import Thread
 
 BYTES_TO_READ = 4096
 HOST = "127.0.0.1"
@@ -6,14 +7,14 @@ PORT = 8080
 
 def handle_connection(conn, addr):
 	with conn:
-		print(f"Connected by: {addr}")
-		
+		print(f"Connected by: {addr} using port: {conn.getsockname()[1]}")
+
 		while True:
 			data = conn.recv(BYTES_TO_READ)
 			if not data:
 				break
 			print(data)
-			conn.send(data)
+			conn.sendall(data)
 
 def start_server():
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -22,6 +23,13 @@ def start_server():
 		s.listen()
 
 		conn, addr = s.accept()
-		handle_connection(conn, addr)
+		# Uncomment line 28 and comment out lines 30-33 for single-threaded
+		# functionality.
+		# handle_connection(conn, addr)
+
+		while True:
+			conn, addr = s.accept()
+			thread = Thread(target=handle_connection, args=(conn, addr))
+			thread.run()
 
 start_server()

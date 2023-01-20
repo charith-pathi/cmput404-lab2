@@ -4,7 +4,7 @@ BYTES_TO_READ = 4096
 
 def get(host, port):
 	# create request
-	request_data = b"GET / HTTP/1.1\nHost:" + host.encode('utf-8') + "\n\n"
+	request_data = b"GET / HTTP/1.1\nHost:" + host.encode('utf-8') + b"\n\n"
 
 	# create socket
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -14,6 +14,7 @@ def get(host, port):
 	s.send(request_data)
 	s.shutdown(socket.SHUT_WR)
 
+	# listen and print response to console
 	response = s.recv(BYTES_TO_READ)
 	while(len(response) > 0):
 		print(response)
@@ -21,4 +22,4 @@ def get(host, port):
 
 	s.close()
 
-get("www.google.com", 80)
+print(get("www.google.com", 80))
