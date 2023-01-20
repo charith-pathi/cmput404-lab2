@@ -1,3 +1,7 @@
+# Charith Pathirathna
+# Lab 02
+# References: https://github.com/aianta/cmput404-tcp-lab from Lab Session.
+
 import socket
 from threading import Thread
 
@@ -20,6 +24,7 @@ def send_request(host, port, request_data):
 
 		return result
 
+# Handles all incoming connections
 def handle_connection(conn, addr):
 	with conn:
 		print(f"Connected by: {addr} using port: {conn.getsockname()[1]}")
@@ -37,6 +42,7 @@ def handle_connection(conn, addr):
 		response = send_request("www.google.com", 80, request)
 		conn.sendall(response)
 
+# Starts a single threaded server using the given HOST and PORT
 def start_server():
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
 		server_socket.bind((PROXY_SERVER_HOST, PROXY_SERVER_PORT))
@@ -46,6 +52,7 @@ def start_server():
 		conn, addr = server_socket.accept()
 		handle_connection(conn, addr)
 
+# Starts a multithreaded server using the given HOST and PORT
 def start_threaded_server():
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
 		server_socket.bind((PROXY_SERVER_HOST, PROXY_SERVER_PORT))
@@ -57,6 +64,7 @@ def start_threaded_server():
 			thread = Thread(target=handle_connection, args=(conn, addr))
 			thread.run()
 
+# Uncomment line 68 for single threaded server to handle incoming connections.
 # start_server()
 start_threaded_server()
 

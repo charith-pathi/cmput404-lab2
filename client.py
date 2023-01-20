@@ -1,3 +1,7 @@
+# Charith Pathirathna
+# Lab 02
+# References: https://github.com/aianta/cmput404-tcp-lab from Lab Session.
+
 import socket
 
 BYTES_TO_READ = 4096
@@ -22,4 +26,4 @@ def get(host, port):
 
 	s.close()
 
-print(get("www.google.com", 80))
+print("www.google.com", 80)
